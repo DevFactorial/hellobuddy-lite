@@ -21,14 +21,12 @@ Follow these steps to create your free accounts, get your API tokens, and config
 1. Once logged in, you will be taken directly to your **Dashboard**.
 2. Look at the top center of the dashboard for your **Private API Key**. 
 3. Click the **Copy** button. 
-4. Paste this string straight into your `config.ini` file under:
-   ```[API_KEYS]
-   SERPAPI_KEY = YOUR_SERPAPI_API_KEY
+4. Keep this in a safe place, this value is later required in config.ini.
 
 
-# 📧 Mailtrap Account Setup & SMTP Guide
+# 📧 Mailtrap Account Setup
 
-Follow these steps to create your free Mailtrap account and capture your SMTP configuration parameters.
+Follow these steps to create your free Mailtrap account and capture your API keys.
 
 ---
 
@@ -50,10 +48,11 @@ Mailtrap defaults new accounts into an **Email Sandbox environment**—this allo
 4. Select the **API Tokens** menu option.
 5. Click on **Add Token**. Provide a name and click on **Save**
 6. Copy the API Token generated.
+7. Keep this in a safe place, this value is later required in config.ini.
 
 ---
 
-## 🛠️ Installation & Setup
+# 🛠️ Installation & Setup
 
 Follow these quick steps to get your local environment up and running from the project root folder.
 
@@ -95,7 +94,7 @@ pip install -r requirements.txt
 
 ---
 
-## ⚙️ Configuration (`config.ini`)
+# ⚙️ Configuration (`config.ini`)
 
 Before running the application, you need to configure your settings. Update the file named `config.ini` in your **project root folder** and fill in your specific details:
 
@@ -131,7 +130,7 @@ SEARCH_COUNTRY = <YOUR_JOB_SEARCH_COUNTRY CODE>  # e.g., "us" for United States,
 
 ---
 
-## 🏃 Running the Application
+# 🏃 Running the Application
 
 With your virtual environment active and your `config.ini` completely filled out, kickstart the background worker by running the following command from the project root folder:
 
@@ -150,10 +149,9 @@ python app/main.py
 
 ---
 
-## 🤝 Happy Job Hunting!
+# 🤝 Happy Job Hunting!
 
 Sit back, relax, and let **HelloBuddy Lite** keep its eyes on the market for you. If you need to stop the scheduler at any time, simply press `CTRL + C` in your active terminal session.
 
 ```
 
-```
