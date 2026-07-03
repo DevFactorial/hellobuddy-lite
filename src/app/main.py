@@ -1,0 +1,71 @@
+import json
+import sys
+import time
+import signal
+import os
+
+from services.scheduler import  setup_scheduler
+from services.job_orchestrator_service import extract_jobs_send_email
+from config.config import get_value_from_config
+
+import os
+
+def display_welcome_screen():
+    # Clear the console screen for a clean startup
+    # 'nt' is for Windows, 'posix' is for Mac/Linux
+    os.system('cls' if os.name == 'nt' else 'clear')
+    
+    # The ASCII Art Banner
+    banner = r"""
+  _    _ ______ _      _      ____  
+ | |  | |  ____| |    | |    / __ \ 
+ | |__| | |__  | |    | |   | |  | |
+ |  __  |  __| | |    | |   | |  | |
+ | |  | | |____| |____| |___| |__| |
+ |_|  |_|______|______|______\____/ 
+                                    
+  ____  _    _ _____  _____ __     __
+ |  _ \| |  | |  __ \|  __ \\ \   / /
+ | |_) | |  | | |  | | |  | |\ \_/ / 
+ |  _ <| |  | | |  | | |  | | \   /  
+ | |_) | |__| | |__| | |__| |  | |   
+ |____/ \____/|_____/|_____/   |_|   
+    """
+    
+    print("-" * 50) # Visual separator line
+    MAROON = "\033[31m"
+    CYAN = "\033[36m"
+    RESET = "\033[0m"
+    print(CYAN + banner)
+    print("Welcome to HelloBuddy Lite [Version 1.0.0]" + RESET + "\n")
+
+    
+
+def handle_shutdown(signum, frame):
+    """Gracefully handles OS signals like SIGINT (Ctrl+C) or SIGTERM."""
+    global running
+    print("\nShutdown signal received. Cleaning up background scheduler...")
+    running = False
+
+def main():
+    # 1. Register shutdown signals
+    signal.signal(signal.SIGINT, handle_shutdown)
+    signal.signal(signal.SIGTERM, handle_shutdown)
+
+   
+     # Load the scheduled time from config
+    scheduled_time = get_value_from_config("SCHEDULER", "JOB_TIME")
+    
+    query = get_value_from_config("SEARCH_SETTINGS", "SEARCH_QUERY")
+    location = get_value_from_config("SEARCH_SETTINGS", "SEARCH_LOCATION")
+    country = get_value_from_config("SEARCH_SETTINGS", "SEARCH_COUNTRY")
+    
+    # Start the scheduler with the extracted job function
+    setup_scheduler(scheduled_time, lambda: extract_jobs_send_email(query, location, country))
+
+    print("Background scheduler is now running. Press Ctrl+C to exit.")
+
+
+if __name__ == "__main__":
+    display_welcome_screen()
+    main()
