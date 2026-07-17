@@ -27,4 +27,4 @@ pip install -r requirements.txt
 # 4. Navigate to src folder and run the app
 echo "[4/4] Starting main application..."
 cd src
-python3 app/main.py || python app/main.py
+exec python3 app/main.py || python app/main.py

@@ -24,5 +24,3 @@ pip install -r requirements.txt
 echo [4/4] Starting main application...
 cd src
 python app/main.py || python3 app/main.py
-
-pause

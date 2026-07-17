@@ -53,21 +53,40 @@ def main():
     signal.signal(signal.SIGINT, handle_shutdown)
     signal.signal(signal.SIGTERM, handle_shutdown)
 
-   
-     # Load the scheduled time from config
-    #config_manager = ConfigManager()
-    settings = AppSettings()
-    #scheduled_time = config_manager.get_value("SCHEDULER", "JOB_TIME")
-    scheduled_time = settings.scheduler.schedule_time
-    
-    # Start the scheduler with the extracted job function
-    #async_wrapper = lambda: asyncio.run(orchestrate(settings))
-    #setup_scheduler(scheduled_time, async_wrapper)
-    
-    #orchestrate(settings)
-    setup_scheduler(scheduled_time, orchestrate, settings)
+    try:
+        # Load the scheduled time from config
+        #config_manager = ConfigManager()
+        settings = AppSettings()
+        #scheduled_time = config_manager.get_value("SCHEDULER", "JOB_TIME")
+        scheduled_time = settings.scheduler.schedule_time
+        
+        # Start the scheduler with the extracted job function
+        #async_wrapper = lambda: asyncio.run(orchestrate(settings))
+        #setup_scheduler(scheduled_time, async_wrapper)
+        
+        #orchestrate(settings)
+        setup_scheduler(scheduled_time, orchestrate, settings)
 
-    print("Background scheduler is now running. Press Ctrl+C to exit.")
+        print("Background scheduler is now running. Press Ctrl+C to exit.")
+    
+    except KeyboardInterrupt:
+        # Catching Ctrl+C separately so it doesn't look like an error
+        print("\n👋 Shutdown signal received. Exiting hellobuddy...")
+        sys.exit(0)
+    
+    except Exception as error:
+        # This catches ANY other subclass of Exception (ValueError, TypeError, NameError, etc.)
+        print("\n" + "!" * 60)
+        print("🚨 AN UNEXPECTED APPLICATION ERROR OCCURRED")
+        print(f"Details: {error}")
+        print("!" * 60 + "\n")
+        
+        # OPTIONAL: If you want to see exactly what line caused the crash 
+        # without blowing up the screen, uncomment the next line:
+        # traceback.print_exc(limit=2)
+        
+        # Exit with error code 1 so the terminal runner knows it failed
+        sys.exit(1)
 
 
 if __name__ == "__main__":
