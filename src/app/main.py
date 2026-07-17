@@ -2,12 +2,13 @@ import json
 import sys
 import time
 import signal
+import asyncio
 import os
 
 from services.scheduler import  setup_scheduler
-from services.job_orchestrator_service import extract_jobs_send_email
-from config.config import get_value_from_config
-
+from services.job_orchestrator_service import extract_jobs_send_email, orchestrate
+#from config.config import ConfigManager
+from config.settings import AppSettings
 import os
 
 def display_welcome_screen():
@@ -37,7 +38,7 @@ def display_welcome_screen():
     CYAN = "\033[36m"
     RESET = "\033[0m"
     print(CYAN + banner)
-    print("Welcome to HelloBuddy Lite [Version 1.0.0]" + RESET + "\n")
+    print("Welcome to HelloBuddy Lite [Version 1.0.1]" + RESET + "\n")
 
     
 
@@ -54,14 +55,17 @@ def main():
 
    
      # Load the scheduled time from config
-    scheduled_time = get_value_from_config("SCHEDULER", "JOB_TIME")
-    
-    query = get_value_from_config("SEARCH_SETTINGS", "SEARCH_QUERY")
-    location = get_value_from_config("SEARCH_SETTINGS", "SEARCH_LOCATION")
-    country = get_value_from_config("SEARCH_SETTINGS", "SEARCH_COUNTRY")
+    #config_manager = ConfigManager()
+    settings = AppSettings()
+    #scheduled_time = config_manager.get_value("SCHEDULER", "JOB_TIME")
+    scheduled_time = settings.scheduler.schedule_time
     
     # Start the scheduler with the extracted job function
-    setup_scheduler(scheduled_time, lambda: extract_jobs_send_email(query, location, country))
+    #async_wrapper = lambda: asyncio.run(orchestrate(settings))
+    #setup_scheduler(scheduled_time, async_wrapper)
+    
+    #orchestrate(settings)
+    setup_scheduler(scheduled_time, orchestrate, settings)
 
     print("Background scheduler is now running. Press Ctrl+C to exit.")
 
